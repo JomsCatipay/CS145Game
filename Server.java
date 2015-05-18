@@ -10,18 +10,20 @@ public class Server{
 	//-- Card Lists
 		//Question Cards
 	ArrayList<QCard> queDeck = new ArrayList<QCard>();
-	ArrayList<QCard> queInPlay = new ArrayList<QCard>();
-	ArrayList<QCard> queDiscard = new ArrayList<QCard>();
+	ArrayList<QCard> quePlayed = new ArrayList<QCard>();
 		//Answer Cards
 	ArrayList<ACard> ansDeck = new ArrayList<ACard>();
-	ArrayList<ACard> ansInPlay = new ArrayList<ACard>();
-	ArrayList<ACard> ansDiscard = new ArrayList<ACard>();
 
 	//-- Clientelle shit
 	ServerSocket ssocket;
-	ArrayList<ServerThread> connectDB = new ArrayList<ServerThread>();
-	int readyCount=0;
+		//lobby shit
 	WaiterThread waiter;
+	ArrayList<ServerThread> lobby = new ArrayList<ServerThread>();
+	//int readyCount=0;
+		//game shit
+	ArrayList<ServerThread> activePlayers = new ArrayList<ServerThread>();
+	ACard[] submitted;
+	ServerThread questioner;
 
 	//-- File names
 	String qFile = "qtext.txt";
@@ -65,19 +67,25 @@ public class Server{
 			waiter.start();
 			this.wait();
 
+			submitted = new ACard[activePlayers.size()];
+
 			for(int i=3; i>0; i--){
-				this.process("start " + i,-1);
+				this.spread("Server message: Game Starting in " + i);
 				this.shuffleDecks();
 				Thread.sleep(800);
 			}
 
 			for(int z=0; z<10; z++){
-				for(int i=0; i<connectDB.size(); i++){
+				for(int i=0; i<activePlayers.size(); i++){
 					this.drawCard(i);
 				}
 			}
 
-			this.process("game",-1);
+			this.spread("game");
+			questioner.send("you question");
+			/*
+			while()
+			//*/
 		}
 	}
 
@@ -88,59 +96,65 @@ public class Server{
 
 	public void drawCard(int id){
 		ACard pawn = ansDeck.remove(0);
-		connectDB.get(id).send("Card: "+ pawn.getValue());
-		ansInPlay.add(pawn);
+		activePlayers.get(id).send("Card: "+ pawn.getValue());
+		//ansInPlay.add(pawn);
 	}
 
 	public void showQuestion(){
-		//this.process();
+		QCard pawn = queDeck.remove(0);
+		this.spread("Que: " + pawn.getValue());
 	}
 
 	public void waitForUser() throws IOException{
 		MyConnection c = new MyConnection(ssocket.accept());
 		if(lobbyFlag){
 			//System.out.println("S: Connected to "+ c.getSocket().getInetAddress());
-			connectDB.add(new ServerThread(c, connectDB.size(), this));
+			lobby.add(new ServerThread(c, lobby.size(), this));
 			//this.process("state",-1);
 		}
 		else{
 			c.sendMessage("S: Server already in play. sorry");
+			c.close();
 		}
 	}
 
 	public void process(String s, int index){
 		synchronized(this){
-			String spread="";
-
 			if(s.equals("ready")){
-				readyCount++;
-				if( connectDB.size()>=MIN_PLAYERS && connectDB.size()<=MAX_PLAYERS && readyCount==connectDB.size() ){
+				questioner = lobby.remove(index);
+				questioner.move(activePlayers.size());
+				activePlayers.add(questioner);
+				if( activePlayers.size()>=MIN_PLAYERS && activePlayers.size()<=MAX_PLAYERS && lobby.size()==0){
 					lobbyFlag = false;
 					this.notify();
 				}
-				spread = "Server message: " + index + " is ready";
+				this.spread("Server message: " + index + " is ready");
 				//this.process("state",-1);
 			}
+			/*
 			else if(s.equals("state")){
-				System.out.println("total clients, ready: "+ connectDB.size() + ", " + readyCount);
+				System.out.println("total clients, ready: "+ activePlayers.size() + ", " + readyCount);
 			}
-			else if(s.startsWith("start")){
-				spread = "Server message: Game Starting in " + s.substring(s.indexOf(" ")+1);
-			}
+			//*/
 			else if(s.equals("draw")){
 				this.drawCard(index);
 			}
-			else{
-				spread = "" + index + ": " + s;
+			else if(s.startsWith("Submit: ")){
+				submitted[index] = new ACard(s.substring(s.indexOf(" ")+1));
+			}
+			else if(index>=0 && !s.startsWith("/")){  // normal chat
+				this.spread("" + index + ": " + s);
 			}
 
 			//spread here
-			if(!spread.equals("")){
-				System.out.println(spread);
-				for(ServerThread pawn: connectDB){
-					pawn.send(spread);
-				}
-			}
+			System.out.println(s+" ~~ " + index);
+		}
+	}
+
+	public void spread(String spread){
+		System.out.println(spread);
+		for(ServerThread pawn: activePlayers){
+			pawn.send(spread);
 		}
 	}
 

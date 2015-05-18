@@ -52,7 +52,7 @@ public class ServerThread extends Thread{
 		loopFlag = false;
 	}
 
-	public void move(){
-		this.index--;
+	public void move(int i){
+		this.index=i;
 	}
 }

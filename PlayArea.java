@@ -92,6 +92,7 @@ public class PlayArea extends JPanel{
 					// submit text to server
 					// get i where hand[i].equals(selected)
 					// hand[i] = null;
+					me.submit((ACard)selected);
 					System.out.println("Submitted");
 				}
 			}

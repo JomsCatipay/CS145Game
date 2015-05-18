@@ -7,6 +7,7 @@ public class Client{
 
     //-- Hand
     ArrayList<ACard> hand = new ArrayList<ACard>();
+    String q;
 
     boolean questioner;
 
@@ -46,6 +47,11 @@ public class Client{
         return null;
     }
 
+    public void submit(ACard p){
+        hand.remove(p);
+        c.sendMessage("Submit: " + p.getValue());
+    }
+
     public void process(String s){
         /*
         if(s.startsWith("//")){
@@ -65,7 +71,10 @@ public class Client{
         else if(s.equals("you question")){
             questioner = true;
         }
-        else if(s.contains("game")){
+        else if(s.startsWith("Que: ")){
+            q = s.substring(s.indexOf(" ")+1);
+        }
+        else if(s.equals("game")){
             screen = new Game(this);
             screen.setVisible(true);
         }
