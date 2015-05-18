@@ -5,9 +5,9 @@ public class QCard extends Card{
 
 	public QCard(String in){
 		this.value = in;
-
 		this.id = COUNT;
 		COUNT++;
+		setImage(1);
 	}
 
 	public int getID(){ return id;}
