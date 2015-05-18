@@ -14,7 +14,7 @@ public class PlayArea extends JPanel{
 	private ACard[] hand;
 	private Client me;
 
-	private Image ac_img, qc_img, bg_img, qc_bck, ac_bck, selimg;
+	private Image ac_img, qc_img, bg_img, qc_bck, ac_bck, selimg, subimg;
 
 	private boolean isDragging;
 
@@ -41,6 +41,7 @@ public class PlayArea extends JPanel{
 			ac_bck = ImageIO.read(new File("img\\aback.png"));
 			qc_bck = ImageIO.read(new File("img\\qback.png"));
 			selimg = ImageIO.read(new File("img\\sel.png"));
+			subimg = ImageIO.read(new File("img\\submit.png"));
 		} catch(Exception e){ e.printStackTrace(); }
 	}
 
@@ -76,6 +77,7 @@ public class PlayArea extends JPanel{
 			}
 			x += 70;
 		}
+		if(selected != null) g2d.drawImage(subimg, 614, 243, this);
 		g2d.drawImage(ac_bck, 309, 92, this);		// answers desk
 		g2d.drawImage(qc_bck, 421, 92, this);		// questions desk
 
@@ -85,7 +87,14 @@ public class PlayArea extends JPanel{
 		Card temp = null, hold = null;
 		if(m == MouseEvent.MOUSE_RELEASED){
 			// check if clicked submitted area
-			//
+			if(selected != null){
+				if(xco >= 614 && xco <= 714 && yco >= 243 && yco <= 298){
+					// submit text to server
+					// get i where hand[i].equals(selected)
+					// hand[i] = null;
+					System.out.println("Submitted");
+				}
+			}
 			// else must have selected another card
 			selected = null;
 			System.out.println("Resetted");
