@@ -9,7 +9,7 @@ public class Client{
     ArrayList<ACard> hand = new ArrayList<ACard>();
     String q;
 
-    boolean questioner;
+    boolean goToSubmit;
 
     MyConnection c;
     ListeningThread lr;
@@ -48,8 +48,11 @@ public class Client{
     }
 
     public void submit(ACard p){
-        hand.remove(p);
-        c.sendMessage("Submit: " + p.getValue());
+        if(goToSubmit){
+            hand.remove(p);
+            c.sendMessage("Submit: " + p.getValue());
+            goToSubmit = false;
+        }
     }
 
     public void process(String s){
@@ -68,13 +71,13 @@ public class Client{
         if(s.startsWith("Card: ") && hand.size()<10){
             hand.add(new ACard(s.substring(s.indexOf(" ")+1)));
         }
-        else if(s.equals("you question")){
-            questioner = true;
-        }
         else if(s.startsWith("Que: ")){
             q = s.substring(s.indexOf(" ")+1);
         }
-        else if(s.equals("game")){
+        else if(s.equals("submit now")){
+            goToSubmit = true;
+        }
+        else if(s.contains("start")){
             screen = new Game(this);
             screen.setVisible(true);
         }

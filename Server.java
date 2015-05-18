@@ -81,10 +81,23 @@ public class Server{
 				}
 			}
 
-			this.spread("game");
-			questioner.send("you question");
-			/*
-			while()
+			this.spread("start");
+			//questioner.send("you question");
+			//*
+			//while(true){
+				// show the question
+				this.showQuestion();
+
+				// everyone aside from questioner is allowed to submit
+				int nope = activePlayers.indexOf(questioner);
+				for(int i=0; i<activePlayers.size(); i++){
+					if(i != nope) activePlayers.get(i).send("submit now");
+				}
+
+				this.wait();
+
+				this.spread("Server message: Everyone has submitted");
+			//}
 			//*/
 		}
 	}
@@ -121,6 +134,7 @@ public class Server{
 	public void process(String s, int index){
 		synchronized(this){
 			if(s.equals("ready")){
+				for(int i=index+1; i<lobby.size(); i++){ lobby.get(i).move(i-1); }
 				questioner = lobby.remove(index);
 				questioner.move(activePlayers.size());
 				activePlayers.add(questioner);
@@ -141,6 +155,15 @@ public class Server{
 			}
 			else if(s.startsWith("Submit: ")){
 				submitted[index] = new ACard(s.substring(s.indexOf(" ")+1));
+				boolean flag=true;
+				for(int i=0; i<activePlayers.size(); i++){
+					if(submitted[i]==null && i!=activePlayers.indexOf(questioner)){
+						flag = false;
+						break;
+					}
+				}
+				if(flag){ this.notify(); }
+				this.drawCard(index);
 			}
 			else if(index>=0 && !s.startsWith("/")){  // normal chat
 				this.spread("" + index + ": " + s);
