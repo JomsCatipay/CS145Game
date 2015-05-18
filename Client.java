@@ -7,9 +7,15 @@ public class Client{
 
     //-- Hand
     ArrayList<ACard> hand = new ArrayList<ACard>();
+        //submitted answers
+    ArrayList<ACard> submitted = new ArrayList<ACard>();
+        //question
     String q;
-
+        //submit answr flag
     boolean goToSubmit;
+
+
+    ArrayList<String> playerNames = new ArrayList<String>();
 
     MyConnection c;
     ListeningThread lr;
@@ -38,8 +44,8 @@ public class Client{
     }
 
     public void readyPrompt(){
-        String s = JOptionPane.showInputDialog("Are you ready?");
-        c.sendMessage(s);
+        String s = JOptionPane.showInputDialog("Enter Your Name:");
+        c.sendMessage("ready " + s);
     }
 
     public ACard getCard(int i){
@@ -68,11 +74,17 @@ public class Client{
             }
         }
         */
-        if(s.startsWith("Card: ") && hand.size()<10){
+        if(s.startsWith("Name: ")){
+            playerNames.add(s.substring(s.indexOf(" ")+1));
+        }
+        else if(s.startsWith("Draw: ") && hand.size()<10){
             hand.add(new ACard(s.substring(s.indexOf(" ")+1)));
         }
         else if(s.startsWith("Que: ")){
             q = s.substring(s.indexOf(" ")+1);
+        }
+        else if(s.startsWith("Ans: ")){
+            submitted.add(new ACard(s.substring(s.indexOf(" ")+1)));
         }
         else if(s.equals("submit now")){
             goToSubmit = true;
@@ -81,10 +93,12 @@ public class Client{
             screen = new Game(this);
             screen.setVisible(true);
         }
+        else if(s.equals("//G")){
+            this.readyPrompt();
+        }
     }
 
     public static void main(String args[]) {
             Client lolol = new Client();
-            lolol.readyPrompt();
     }
 }

@@ -22,6 +22,7 @@ public class Server{
 	//int readyCount=0;
 		//game shit
 	ArrayList<ServerThread> activePlayers = new ArrayList<ServerThread>();
+	ArrayList<String> playerNames = new ArrayList<String>();
 	ACard[] submitted;
 	ServerThread questioner;
 
@@ -97,6 +98,12 @@ public class Server{
 				this.wait();
 
 				this.spread("Server message: Everyone has submitted");
+
+				for(ACard pawn: submitted){
+					if(pawn!=null) this.spread("Ans: " + pawn.getValue());
+				}
+
+				this.spread("Server message: "+ playerNames.get(activePlayers.indexOf(questioner)) + " can now pick an answer");
 			//}
 			//*/
 		}
@@ -109,7 +116,7 @@ public class Server{
 
 	public void drawCard(int id){
 		ACard pawn = ansDeck.remove(0);
-		activePlayers.get(id).send("Card: "+ pawn.getValue());
+		activePlayers.get(id).send("Draw: "+ pawn.getValue());
 		//ansInPlay.add(pawn);
 	}
 
@@ -124,6 +131,7 @@ public class Server{
 			//System.out.println("S: Connected to "+ c.getSocket().getInetAddress());
 			lobby.add(new ServerThread(c, lobby.size(), this));
 			//this.process("state",-1);
+			c.sendMessage("//G");
 		}
 		else{
 			c.sendMessage("S: Server already in play. sorry");
@@ -133,17 +141,27 @@ public class Server{
 
 	public void process(String s, int index){
 		synchronized(this){
-			if(s.equals("ready")){
+			if(s.startsWith("ready")){
+				//remove ready player from lobby
 				for(int i=index+1; i<lobby.size(); i++){ lobby.get(i).move(i-1); }
 				questioner = lobby.remove(index);
+				//add ready player to active
 				questioner.move(activePlayers.size());
 				activePlayers.add(questioner);
+				//brief him on names
+				for(String lolz : playerNames){
+					questioner.send("Name: " + lolz);
+				}
+				//spread word of his name
+				playerNames.add(s.substring(s.indexOf(" ")+1));
+				this.spread("Name: " + playerNames.get(playerNames.size()-1));
+				this.spread("Server message: " + playerNames.get(playerNames.size()-1) + " is ready");
+				//this.process("state",-1);
+
 				if( activePlayers.size()>=MIN_PLAYERS && activePlayers.size()<=MAX_PLAYERS && lobby.size()==0){
 					lobbyFlag = false;
 					this.notify();
 				}
-				this.spread("Server message: " + index + " is ready");
-				//this.process("state",-1);
 			}
 			/*
 			else if(s.equals("state")){
@@ -162,8 +180,8 @@ public class Server{
 						break;
 					}
 				}
-				if(flag){ this.notify(); }
 				this.drawCard(index);
+				if(flag){ this.notify(); }
 			}
 			else if(index>=0 && !s.startsWith("/")){  // normal chat
 				this.spread("" + index + ": " + s);
