@@ -26,7 +26,7 @@ public class ServerThread extends Thread{
 
 	public void run(){
 		while(loopFlag){
-			String s = c.getMessage();
+			String s = c.getMessage().trim();
 			srvr.process(s, this.index);
 		}
 	}
