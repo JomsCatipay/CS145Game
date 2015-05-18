@@ -12,13 +12,14 @@ public class PlayArea extends JPanel{
 	private static JLabel text;
 	private static String labeltext;
 	private ACard[] hand;
+	private Client me;
 
 	private Image ac_img, qc_img, bg_img, qc_bck, ac_bck, selimg;
 
 	private boolean isDragging;
 
-	// public PlayArea(Client self){
-	public PlayArea(){
+	public PlayArea(Client self){
+		this.me = self;
 		selected = null;
 
 		readImages();
@@ -50,8 +51,9 @@ public class PlayArea extends JPanel{
 		
 		this.hand = new ACard[10];
 		for(int i=0 ; i<10 ; i++){
-			String x = "Card #" + (i+1);
-			hand[i] = new ACard(x);
+			// String x = "Card #" + (i+1);
+			// hand[i] = new ACard(x);
+			hand[i] = me.getCard(i);
 		}
 		// this.hand = me.hand
 
@@ -64,6 +66,11 @@ public class PlayArea extends JPanel{
 					if(hand[i].equals(selected)){
 						System.out.println(hand[i].getValue() + " is selected");
 						g2d.drawImage(selimg, x, 336, this);
+						String s = hand[i].getValue();
+						g2d.setColor(Color.WHITE);
+							int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+							int start = 375/2 - stringLen/2;
+							g2d.drawString(s, start + 210, 235);
 					}
 				}
 			}

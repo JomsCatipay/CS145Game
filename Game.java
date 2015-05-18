@@ -11,11 +11,10 @@ public class Game extends JFrame{
 	private JButton sbutton;
 	private PlayArea area;
 	private JScrollPane areaS, listS, chatS;
-	// private Client client;
+	private Client client;
 
-	// public Game(Client client){
-	public Game(){
-		// this.client = client;
+	public Game(Client client){
+		this.client = client;
 
 		try{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -100,8 +99,7 @@ public class Game extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
 
-		area = new PlayArea();
-		// area = new PlayArea(client);
+		area = new PlayArea(client);
 		area.setSize(800, 400);
 		area.setVisible(true);
 		area.setBorder(BorderFactory.createLineBorder(Color.BLACK));
