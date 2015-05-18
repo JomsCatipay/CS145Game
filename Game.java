@@ -115,7 +115,7 @@ public class Game extends JFrame{
 
 	public void chooseAnswer(String[] choices, String question){
 		Object[] answers = (Object[]) choices;
-		String s = (String)JOptionPane.showInputDialog(this,question, "Customized Dialog", JOptionPane.PLAIN_MESSAGE, null, answers, choices[0]);
+		String s = (String) JOptionPane.showInputDialog(this, question, "Choose an answer", JOptionPane.QUESTION_MESSAGE, null, answers, answers[0]);
 
 		if ((s != null) && (s.length() > 0)) {
 			System.out.println("You have chosen: " + s);
