@@ -110,7 +110,7 @@ public class Game extends JFrame{
 		setSize(800,700);
 		setLocationRelativeTo(null);
 		setResizable(false);
-		setTitle("Cards Againt Humanity OnLAN");
+		setTitle("Cards Againt Humanity OnLAN.");
 	}
 
 }

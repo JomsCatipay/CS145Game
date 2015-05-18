@@ -71,15 +71,15 @@ public class PlayArea extends JPanel{
 						g2d.setColor(Color.WHITE);
 							int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
 							int start = 375/2 - stringLen/2;
-							g2d.drawString(s, start + 210, 235);
+							g2d.drawString(s, start + 210, 270);
 					}
 				}
 			}
 			x += 70;
 		}
 		if(selected != null) g2d.drawImage(subimg, 614, 243, this);
-		g2d.drawImage(ac_bck, 309, 92, this);		// answers desk
-		g2d.drawImage(qc_bck, 421, 92, this);		// questions desk
+		g2d.drawImage(ac_bck, 309, 122, this);		// answers desk
+		g2d.drawImage(qc_bck, 421, 122, this);		// questions desk
 
 	}
 
