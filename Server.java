@@ -23,6 +23,7 @@ public class Server{
 		//game shit
 	ArrayList<ServerThread> activePlayers = new ArrayList<ServerThread>();
 	ArrayList<String> playerNames = new ArrayList<String>();
+	int[] points;
 	ACard[] submitted;
 	ServerThread questioner;
 
@@ -68,7 +69,8 @@ public class Server{
 			waiter.start();
 			this.wait();
 
-			submitted = new ACard[activePlayers.size()];
+			//setup arrays
+			points = new int[activePlayers.size()];
 
 			for(int i=3; i>0; i--){
 				this.spread("Server message: Game Starting in " + i);
@@ -85,7 +87,10 @@ public class Server{
 			this.spread("start");
 			//questioner.send("you question");
 			//*
-			//while(true){
+			while( points[activePlayers.indexOf(questioner)] < (activePlayers.size() /3 +2) ){
+				//clear submits
+				submitted = new ACard[activePlayers.size()];
+
 				// show the question
 				this.showQuestion();
 
@@ -107,7 +112,9 @@ public class Server{
 				this.spread("Server message: "+ playerNames.get(activePlayers.indexOf(questioner)) + " can now pick an answer");
 
 				this.wait();
-			//}
+			}
+
+			System.out.println("Someone won");
 			//*/
 		}
 	}
@@ -188,11 +195,18 @@ public class Server{
 			}
 			else if(s.startsWith("Choice: ")){
 				for(int i=0; i<submitted.length; i++){
-					if(submitted[i]!=null && submitted[i].getValue().equals(s.substring(s.indexOf(" ")+1))) this.spread("Chosen Answer: "+ submitted[i].getValue());
+					if(submitted[i]!=null && submitted[i].getValue().equals(s.substring(s.indexOf(" ")+1))){
+						this.spread("Chosen Answer: "+ submitted[i].getValue());
+						questioner = activePlayers.get(i);
+						points[i]++;
+						this.spread(playerNames.get(i)+ " got the point");
+						this.notify();
+						break;
+					}
 				}
 			}
 			else if(index>=0 && !s.startsWith("/")){  // normal chat
-				this.spread("Chat:" + index + ": " + s);
+				this.spread("Chat: " + index + ": " + s);
 			}
 
 			//spread here

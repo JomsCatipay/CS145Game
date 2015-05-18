@@ -63,7 +63,8 @@ public class Client{
 
     public void choose(String s){
         c.sendMessage("Choice: " + s);
-        submitted.clear();
+        while(submitted.size()>0) submitted.remove(0);
+        questioner = false;
     }
 
     public void process(String s){
@@ -115,7 +116,6 @@ public class Client{
                     choices[i] = (submitted.remove(0)).getValue();
                 }
                 screen.chooseAnswer(choices,q);
-                questioner = false;
             }
         }
     }
