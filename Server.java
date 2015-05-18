@@ -112,6 +112,8 @@ public class Server{
 				this.spread("Server message: "+ playerNames.get(activePlayers.indexOf(questioner)) + " can now pick an answer");
 
 				this.wait();
+
+				this.spread("clear");
 			}
 
 			System.out.println("Someone won");

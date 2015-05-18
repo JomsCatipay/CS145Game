@@ -101,22 +101,26 @@ public class Client{
         else if(s.equals("you question")){
             questioner = true;
         }
-        else if(s.contains("start")){
-            screen = new Game(this);
-            screen.setVisible(true);
-        }
-        else if(s.equals("//G")){
-            this.readyPrompt();
+        else if(s.equals("clear")){
+            submitted.clear();
         }
         else if(s.endsWith("can now pick an answer")){
             if(questioner){
                 int len = submitted.size();
+                System.out.println("AAAAAAAAAAAAAAA "+len);
                 String[] choices = new String[len];
                 for(int i=0 ; i<len ; i++){
                     choices[i] = (submitted.remove(0)).getValue();
                 }
                 screen.chooseAnswer(choices,q);
             }
+        }
+        else if(s.contains("start")){
+            screen = new Game(this);
+            screen.setVisible(true);
+        }
+        else if(s.equals("//G")){
+            this.readyPrompt();
         }
     }
 
