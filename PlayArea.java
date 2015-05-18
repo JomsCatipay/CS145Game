@@ -7,29 +7,27 @@ import javax.swing.*;
 
 public class PlayArea extends JPanel{
 
-	private Card sample, selected;
+	private static Card selected;
 	private static int xco, yco, inx, iny;
 	private static JLabel text;
 	private static String labeltext;
 	private ACard[] hand;
-	// private Client me;
 
-	private Image ac_img, qc_img, bg_img, qc_bck, ac_bck;
+	private Image ac_img, qc_img, bg_img, qc_bck, ac_bck, selimg;
 
 	private boolean isDragging;
 
 	// public PlayArea(Client self){
 	public PlayArea(){
-		sample = new ACard("This is a sample card.");
 		selected = null;
 
 		readImages();
 
 		addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent e){
+			public void mouseReleased(MouseEvent e){
 				xco = e.getX();
 				yco = e.getY();
-				cardCheck(MouseEvent.MOUSE_CLICKED);
+				cardCheck(MouseEvent.MOUSE_RELEASED);
 			}
 		});
 	}
@@ -41,6 +39,7 @@ public class PlayArea extends JPanel{
 			bg_img = ImageIO.read(new File("img\\bg.png"));
 			ac_bck = ImageIO.read(new File("img\\aback.png"));
 			qc_bck = ImageIO.read(new File("img\\qback.png"));
+			selimg = ImageIO.read(new File("img\\sel.png"));
 		} catch(Exception e){ e.printStackTrace(); }
 	}
 
@@ -61,6 +60,12 @@ public class PlayArea extends JPanel{
 			if(hand[i]!=null){
 				g2d.drawImage(ac_img, x, 336, this);
 				hand[i].setRect(new Rectangle2D.Double(x,336,70,100));
+				if(selected != null){
+					if(hand[i].equals(selected)){
+						System.out.println(hand[i].getValue() + " is selected");
+						g2d.drawImage(selimg, x, 336, this);
+					}
+				}
 			}
 			x += 70;
 		}
@@ -71,11 +76,19 @@ public class PlayArea extends JPanel{
 
 	public void cardCheck(int m){
 		Card temp = null, hold = null;
-		if(m == MouseEvent.MOUSE_CLICKED){
+		if(m == MouseEvent.MOUSE_RELEASED){
+			// check if clicked submitted area
+			//
+			// else must have selected another card
+			selected = null;
+			System.out.println("Resetted");
+			repaint();
+
 			for(int i=0 ; i<10 ; i++){
 				if(hand[i].getRect().contains(xco,yco)){
 					labeltext = hand[i].getValue();
-					System.out.println(labeltext);
+					selected = hand[i];
+					repaint();
 				}
 			}
 		}

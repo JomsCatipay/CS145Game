@@ -23,10 +23,6 @@ public abstract class Card{
 		this.xco = x;
 		this.yco = y;
 	}
-
-	public void select(){ this.selected = true; }
-	public void deselect(){ this.selected = false; }
-	public boolean isSelected(){ return this.selected; }
 	
 	public void paint(Graphics g, JComponent c){
 		g.drawImage(img, xco, yco, c);
@@ -40,5 +36,9 @@ public abstract class Card{
 
 	public Rectangle2D getRect(){ return this.rect; }
 	public void setRect(Rectangle2D rect){ this.rect = rect; }
+	public boolean equals(Card x){
+		if(x.getValue().equals(this.getValue())) return true;
+		return false;
+	}
 
 }
