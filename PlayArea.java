@@ -14,7 +14,7 @@ public class PlayArea extends JPanel{
 	private ACard[] hand;
 	private Client me;
 
-	private Image ac_img, qc_img, bg_img, qc_bck, ac_bck, selimg, subimg;
+	private Image ac_img, qc_img, bg_img, qc_bck, ac_bck, selimg, subimg, modimg;
 
 	private boolean isDragging;
 
@@ -42,6 +42,7 @@ public class PlayArea extends JPanel{
 			qc_bck = ImageIO.read(new File("img\\qback.png"));
 			selimg = ImageIO.read(new File("img\\sel.png"));
 			subimg = ImageIO.read(new File("img\\submit.png"));
+			modimg = ImageIO.read(new File("img\\mode.png"));
 		} catch(Exception e){ e.printStackTrace(); }
 	}
 
@@ -49,6 +50,8 @@ public class PlayArea extends JPanel{
 		Graphics2D g2d = (Graphics2D) g;
 		super.paintComponent(g2d);
 		g2d.drawImage(bg_img, 0, 0, this);
+		g2d.drawImage(ac_bck, 309, 122, this);		// answers desk
+		g2d.drawImage(qc_bck, 421, 122, this);		// questions desk
 		
 		this.hand = new ACard[10];
 		for(int i=0 ; i<10 ; i++){
@@ -58,28 +61,45 @@ public class PlayArea extends JPanel{
 		}
 		// this.hand = me.hand
 
+		g2d.setColor(Color.WHITE);
+		String s = "Question:";
+		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+		int start = 375/2 - stringLen/2;
+		g2d.drawString(s, start + 210, 60);
+		s = me.q;
+		stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+		start = 375/2 - stringLen/2;
+		g2d.drawString(s, start + 210, 80);
+
 		int x = 50;
 		for(int i=0 ; i<10 ; i++){
 			if(hand[i]!=null){
 				g2d.drawImage(ac_img, x, 336, this);
 				hand[i].setRect(new Rectangle2D.Double(x,336,70,100));
-				if(selected != null){
-					if(hand[i].equals(selected)){
-						System.out.println(hand[i].getValue() + " is selected");
-						g2d.drawImage(selimg, x, 336, this);
-						String s = hand[i].getValue();
-						g2d.setColor(Color.WHITE);
-							int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
-							int start = 375/2 - stringLen/2;
+				if(!me.goToSubmit && i>0){
+					s = "Waiting for the other players to pick an answer...";
+					stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+					start = 375/2 - stringLen/2;
+					g2d.drawString(s, start + 210, 270);
+					// g2d.drawImage(modimg, 421, 122, this);
+				}
+				else{
+					// g2d.drawImage(modimg, 309, 122, this);
+					if(selected != null){
+						if(hand[i].equals(selected)){
+							System.out.println(hand[i].getValue() + " is selected");
+							g2d.drawImage(selimg, x, 336, this);
+							s = hand[i].getValue();
+							stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+							start = 375/2 - stringLen/2;
 							g2d.drawString(s, start + 210, 270);
+						}
 					}
 				}
 			}
 			x += 70;
 		}
 		if(selected != null) g2d.drawImage(subimg, 614, 243, this);
-		g2d.drawImage(ac_bck, 309, 122, this);		// answers desk
-		g2d.drawImage(qc_bck, 421, 122, this);		// questions desk
 
 	}
 
@@ -104,7 +124,7 @@ public class PlayArea extends JPanel{
 			for(int i=0 ; i<10 ; i++){
 				if(hand[i].getRect().contains(xco,yco)){
 					labeltext = hand[i].getValue();
-					selected = hand[i];
+					if(me.goToSubmit) selected = hand[i];
 					repaint();
 				}
 			}

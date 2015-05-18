@@ -67,7 +67,6 @@ public class Game extends JFrame{
 		gb.gridx = 0;
 		gb.gridy++;
 		gb.gridwidth = 2;
-		// gb.gridheight = 2;
 		gb.fill = GridBagConstraints.BOTH;
 		pane.add(areaS, gb);
 		gb.gridx = 6;
@@ -97,6 +96,7 @@ public class Game extends JFrame{
 		pane.add(sbutton, gb);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setLayout(new BorderLayout());
 
 		area = new PlayArea(client);
@@ -111,6 +111,16 @@ public class Game extends JFrame{
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setTitle("Cards Againt Humanity OnLAN.");
+	}
+
+	public void chooseAnswer(String[] choices, String question){
+		Object[] answers = (Object[]) choices;
+		String s = (String)JOptionPane.showInputDialog(this,question, "Customized Dialog", JOptionPane.PLAIN_MESSAGE, null, answers, choices[0]);
+
+		if ((s != null) && (s.length() > 0)) {
+			System.out.println("You have chosen: " + s);
+		}
+
 	}
 
 }

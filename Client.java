@@ -96,6 +96,16 @@ public class Client{
         else if(s.equals("//G")){
             this.readyPrompt();
         }
+        else if(s.contains("can now pick an answer")){
+            if(!goToSubmit){
+                int len = submitted.size();
+                String[] choices = new String[len];
+                for(int i=0 ; i<len ; i++){
+                    choices[i] = (submitted.remove(0)).getValue();
+                }
+                screen.chooseAnswer(choices,q);
+            }
+        }
     }
 
     public static void main(String args[]) {
