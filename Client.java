@@ -13,7 +13,7 @@ public class Client{
     String q;
         //submit answr flag
     boolean goToSubmit;
-
+    boolean questioner;
 
     ArrayList<String> playerNames = new ArrayList<String>();
 
@@ -61,6 +61,11 @@ public class Client{
         }
     }
 
+    public void choose(String s){
+        c.sendMessage("Choice: " + s);
+        submitted.clear();
+    }
+
     public void process(String s){
         /*
         if(s.startsWith("//")){
@@ -74,7 +79,10 @@ public class Client{
             }
         }
         */
-        if(s.startsWith("Name: ")){
+        if(s.startsWith("Chat: ")){
+
+        }
+        else if(s.startsWith("Name: ")){
             playerNames.add(s.substring(s.indexOf(" ")+1));
         }
         else if(s.startsWith("Draw: ") && hand.size()<10){
@@ -89,6 +97,9 @@ public class Client{
         else if(s.equals("submit now")){
             goToSubmit = true;
         }
+        else if(s.equals("you question")){
+            questioner = true;
+        }
         else if(s.contains("start")){
             screen = new Game(this);
             screen.setVisible(true);
@@ -96,14 +107,15 @@ public class Client{
         else if(s.equals("//G")){
             this.readyPrompt();
         }
-        else if(s.contains("can now pick an answer")){
-            if(!goToSubmit){
+        else if(s.endsWith("can now pick an answer")){
+            if(questioner){
                 int len = submitted.size();
                 String[] choices = new String[len];
                 for(int i=0 ; i<len ; i++){
                     choices[i] = (submitted.remove(0)).getValue();
                 }
                 screen.chooseAnswer(choices,q);
+                questioner = false;
             }
         }
     }

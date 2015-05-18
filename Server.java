@@ -91,6 +91,7 @@ public class Server{
 
 				// everyone aside from questioner is allowed to submit
 				int nope = activePlayers.indexOf(questioner);
+				questioner.send("you question");
 				for(int i=0; i<activePlayers.size(); i++){
 					if(i != nope) activePlayers.get(i).send("submit now");
 				}
@@ -104,6 +105,8 @@ public class Server{
 				}
 
 				this.spread("Server message: "+ playerNames.get(activePlayers.indexOf(questioner)) + " can now pick an answer");
+
+				this.wait();
 			//}
 			//*/
 		}
@@ -183,8 +186,13 @@ public class Server{
 				this.drawCard(index);
 				if(flag){ this.notify(); }
 			}
+			else if(s.startsWith("Choice: ")){
+				for(int i=0; i<submitted.length; i++){
+					if(submitted[i]!=null && submitted[i].getValue().equals(s.substring(s.indexOf(" ")+1))) this.spread("Chosen Answer: "+ submitted[i].getValue());
+				}
+			}
 			else if(index>=0 && !s.startsWith("/")){  // normal chat
-				this.spread("" + index + ": " + s);
+				this.spread("Chat:" + index + ": " + s);
 			}
 
 			//spread here

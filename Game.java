@@ -119,6 +119,7 @@ public class Game extends JFrame{
 
 		if ((s != null) && (s.length() > 0)) {
 			System.out.println("You have chosen: " + s);
+			client.choose(s);
 		}
 
 	}
