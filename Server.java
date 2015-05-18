@@ -71,7 +71,7 @@ public class Server{
 				Thread.sleep(800);
 			}
 
-			for(int z=0; z<9; z++){
+			for(int z=0; z<10; z++){
 				for(int i=0; i<connectDB.size(); i++){
 					this.drawCard(i);
 				}
