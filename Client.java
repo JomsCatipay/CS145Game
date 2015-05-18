@@ -14,6 +14,8 @@ public class Client{
         //submit answr flag
     boolean goToSubmit;
     boolean questioner;
+    String name;
+    int score;  // not really
 
     ArrayList<String> playerNames = new ArrayList<String>();
 
@@ -25,6 +27,7 @@ public class Client{
 
     public Client(){
         //*
+        score = 0;
         try {
             System.out.println("C: Connecting to server...");
             c = new MyConnection(new Socket("127.0.0.1", 8888));
@@ -45,6 +48,7 @@ public class Client{
 
     public void readyPrompt(){
         String s = JOptionPane.showInputDialog("Enter Your Name:");
+        this.name = s;
         c.sendMessage("ready " + s);
     }
 

@@ -70,21 +70,31 @@ public class PlayArea extends JPanel{
 		stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
 		start = 375/2 - stringLen/2;
 		g2d.drawString(s, start + 210, 80);
+		s = "Player: " + me.name;
+		stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+		g2d.drawString(s, 750 - stringLen, 125);
+		s = "Points: " + me.score;
+		stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+		g2d.drawString(s, 750 - stringLen, 140);
 
 		int x = 50;
 		for(int i=0 ; i<10 ; i++){
 			if(hand[i]!=null){
 				g2d.drawImage(ac_img, x, 336, this);
 				hand[i].setRect(new Rectangle2D.Double(x,336,70,100));
-				if(!me.goToSubmit && i>0){
-					s = "Waiting for the other players to pick an answer...";
+				if(me.questioner){
+					s = "It's your turn to choose the winning answer!";
 					stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
 					start = 375/2 - stringLen/2;
 					g2d.drawString(s, start + 210, 270);
-					// g2d.drawImage(modimg, 421, 122, this);
+					s = "Waiting for the other players to pick an answer...";
+					stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+					start = 375/2 - stringLen/2;
+					g2d.drawString(s, start + 210, 285);
+					g2d.drawImage(modimg, 421, 122, this);
 				}
 				else{
-					// g2d.drawImage(modimg, 309, 122, this);
+					g2d.drawImage(modimg, 309, 122, this);
 					if(selected != null){
 						if(hand[i].equals(selected)){
 							System.out.println(hand[i].getValue() + " is selected");
