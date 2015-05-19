@@ -85,6 +85,7 @@ public class Server{
 			}
 
 			this.spread("start");
+			this.spread("wincon " + (activePlayers.size() /3 + 2));
 			//questioner.send("you question");
 			//*
 			while( points[activePlayers.indexOf(questioner)] < (activePlayers.size() /3 +2) ){
@@ -198,10 +199,10 @@ public class Server{
 			else if(s.startsWith("Choice: ")){
 				for(int i=0; i<submitted.length; i++){
 					if(submitted[i]!=null && submitted[i].getValue().equals(s.substring(s.indexOf(" ")+1))){
-						this.spread("Chosen Answer: "+ submitted[i].getValue());
+						this.spread("Chosen Answer: " + submitted[i].getValue());
 						questioner = activePlayers.get(i);
 						points[i]++;
-						this.spread(playerNames.get(i)+ " got the point");
+						this.spread(playerNames.get(i) + " got the point");
 						this.notify();
 						break;
 					}

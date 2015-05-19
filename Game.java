@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import javax.imageio.*;
 import javax.swing.*;
 
 public class Game extends JFrame{
@@ -12,19 +14,22 @@ public class Game extends JFrame{
 	private PlayArea area;
 	private JScrollPane areaS, listS, chatS;
 	private Client client;
+	private ImageIcon ico;
 
 	public Game(Client client){
 		this.client = client;
 
 		try{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			Image x = ImageIO.read(new File("img\\ico.png"));
+			ico = new ImageIcon(x);
 		} catch(Exception e){
 			e.printStackTrace();
 		}
 
 		Font ft = new Font("Calibri", Font.PLAIN, 12);
 
-		window = new JTextArea(10, 60);
+		window = new JTextArea(7, 60);
 		window.setEditable(false);
 		window.setWrapStyleWord(true);
 		window.setLineWrap(true);
@@ -33,7 +38,7 @@ public class Game extends JFrame{
 		areaS = new JScrollPane(window);
 		areaS.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-		list = new JTextArea(10, 15);
+		list = new JTextArea(7, 15);
 		list.setEditable(false);
 		list.setFont(ft);
 		listS = new JScrollPane(list);
@@ -115,7 +120,7 @@ public class Game extends JFrame{
 
 	public void chooseAnswer(String[] choices, String question){
 		Object[] answers = (Object[]) choices;
-		String s = (String) JOptionPane.showInputDialog(this, question, "Choose an answer", JOptionPane.QUESTION_MESSAGE, null, answers, answers[0]);
+		String s = (String) JOptionPane.showInputDialog(this, question, "Choose an answer", JOptionPane.QUESTION_MESSAGE, ico, answers, answers[0]);
 
 		if ((s != null) && (s.length() > 0)) {
 			System.out.println("You have chosen: " + s);
@@ -123,5 +128,21 @@ public class Game extends JFrame{
 		}
 
 	}
+
+	public void showAnswers(String[] choices, String question){			// show answers to non-questioner
+		String label = "\"" + question + "\"\n";
+		for(int i=0 ; i<choices.length ; i++){
+			label += "\n" + choices[i];
+		}
+		JOptionPane.showMessageDialog(this, label, "And the choices are...", JOptionPane.INFORMATION_MESSAGE, ico);
+	}
+
+	public void showChosen(String winner, String ans){			// show winner to round
+		String label = winner + " won that round!\nTheir answer was:\n";
+		label += "\"" + ans + "\"";
+		JOptionPane.showMessageDialog(this, label, "And the point goes to...", JOptionPane.INFORMATION_MESSAGE, ico);
+	}
+
+	public void paintpls(){ area.repaint(); }
 
 }

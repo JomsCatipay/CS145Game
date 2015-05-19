@@ -76,6 +76,9 @@ public class PlayArea extends JPanel{
 		s = "Points: " + me.score;
 		stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
 		g2d.drawString(s, 750 - stringLen, 140);
+		s = "Points to win: " + me.wincon;
+		stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+		g2d.drawString(s, 750 - stringLen, 155);
 
 		int x = 50;
 		for(int i=0 ; i<10 ; i++){
@@ -95,15 +98,23 @@ public class PlayArea extends JPanel{
 				}
 				else{
 					g2d.drawImage(modimg, 309, 122, this);
-					if(selected != null){
-						if(hand[i].equals(selected)){
-							System.out.println(hand[i].getValue() + " is selected");
-							g2d.drawImage(selimg, x, 336, this);
-							s = hand[i].getValue();
-							stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
-							start = 375/2 - stringLen/2;
-							g2d.drawString(s, start + 210, 270);
+					if(me.goToSubmit){
+						if(selected != null){
+							if(hand[i].equals(selected)){
+								System.out.println(hand[i].getValue() + " is selected");
+								g2d.drawImage(selimg, x, 336, this);
+								s = hand[i].getValue();
+								stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+								start = 375/2 - stringLen/2;
+								g2d.drawString(s, start + 210, 270);
+							}
 						}
+					}
+					else{
+						s = "Waiting for the other players to pick an answer...";
+						stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
+						start = 375/2 - stringLen/2;
+						g2d.drawString(s, start + 210, 270);
 					}
 				}
 			}
@@ -116,17 +127,12 @@ public class PlayArea extends JPanel{
 	public void cardCheck(int m){
 		Card temp = null, hold = null;
 		if(m == MouseEvent.MOUSE_RELEASED){
-			// check if clicked submitted area
 			if(selected != null){
 				if(xco >= 614 && xco <= 714 && yco >= 243 && yco <= 298){
-					// submit text to server
-					// get i where hand[i].equals(selected)
-					// hand[i] = null;
 					me.submit((ACard)selected);
 					System.out.println("Submitted");
 				}
 			}
-			// else must have selected another card
 			selected = null;
 			System.out.println("Resetted");
 			repaint();
