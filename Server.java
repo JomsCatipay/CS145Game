@@ -117,6 +117,7 @@ public class Server{
 				this.spread("clear");
 			}
 
+			//conclude winners
 			System.out.println("Someone won");
 			//*/
 		}
@@ -155,6 +156,12 @@ public class Server{
 	public void process(String s, int index){
 		synchronized(this){
 			if(s.startsWith("ready")){
+				for(String j: playerNames){
+					if(s.substring(s.indexOf(" ")+1).equals(j)){
+						lobby.get(index).send("//G");
+						return;
+					}
+				}
 				//remove ready player from lobby
 				for(int i=index+1; i<lobby.size(); i++){ lobby.get(i).move(i-1); }
 				questioner = lobby.remove(index);
@@ -168,7 +175,7 @@ public class Server{
 				//spread word of his name
 				playerNames.add(s.substring(s.indexOf(" ")+1));
 				this.spread("Name: " + playerNames.get(playerNames.size()-1));
-				this.spread("Server message: " + playerNames.get(playerNames.size()-1) + " is ready");
+				//this.spread("Chat: Server message: " + playerNames.get(playerNames.size()-1) + " is ready");
 				//this.process("state",-1);
 
 				if( activePlayers.size()>=MIN_PLAYERS && activePlayers.size()<=MAX_PLAYERS && lobby.size()==0){
@@ -208,8 +215,8 @@ public class Server{
 					}
 				}
 			}
-			else if(index>=0 && !s.startsWith("/")){  // normal chat
-				this.spread("Chat: " + index + ": " + s);
+			else if(index>=0 && s.startsWith("/chat ")){  // normal chat
+				this.spread("Chat: " + playerNames.get(index) + ": " + s.substring(s.indexOf(" ")+1));
 			}
 
 			//spread here

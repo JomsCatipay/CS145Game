@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class Game extends JFrame{
 	
@@ -92,6 +93,7 @@ public class Game extends JFrame{
 				String msg = chat.getText();
 				chat.setText("");
 				// conn.sendMessage(msg);
+				client.sendChat(msg);
 				chat.requestFocus();
 			}
 		});
@@ -116,6 +118,19 @@ public class Game extends JFrame{
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setTitle("Cards Againt Humanity OnLAN.");
+	}
+
+	public void showChat(String s){
+		window.append(s+"\n");
+		window.setCaretPosition(window.getDocument().getLength());
+	}
+
+	public void updateList(ArrayList<String> a, int[] b){
+		String out = "";
+		for(int i=0; i<a.size(); i++){
+			out = out + a.get(i) + ": " + b[i] + "\n";
+		}
+		list.setText(out);
 	}
 
 	public void chooseAnswer(String[] choices, String question){

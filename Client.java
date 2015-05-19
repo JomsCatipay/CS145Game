@@ -18,6 +18,7 @@ public class Client{
     int score;  // not really
 
     ArrayList<String> playerNames = new ArrayList<String>();
+    int[] points;
 
     MyConnection c;
     ListeningThread lr;
@@ -79,6 +80,10 @@ public class Client{
         questioner = false;
     }
 
+    public void sendChat(String s){
+        c.sendMessage("/chat " + s);
+    }
+
     public void process(String s){
         /*
         if(s.startsWith("//")){
@@ -93,7 +98,7 @@ public class Client{
         }
         */
         if(s.startsWith("Chat: ")){
-
+            screen.showChat(s.substring(s.indexOf(" ")+1));
         }
         else if(s.startsWith("Name: ")){
             playerNames.add(s.substring(s.indexOf(" ")+1));
@@ -113,6 +118,7 @@ public class Client{
         }
         else if(s.equals("you question")){
             questioner = true;
+            screen.paintpls();
         }
         else if(s.equals("clear")){
             submitted.clear();
@@ -138,7 +144,9 @@ public class Client{
             }
         }
         else if(s.contains("start")){
+            points = new int[playerNames.size()];
             screen = new Game(this);
+            screen.updateList(playerNames, points);
             screen.setVisible(true);
         }
         else if(s.startsWith("wincon ")){
@@ -153,6 +161,9 @@ public class Client{
             if(msg.equals(this.name)) this.score++;
             screen.showChosen(msg, chosen);
             chosen = null;
+
+            points[ playerNames.indexOf(msg) ]++;
+            screen.updateList(playerNames, points);
         }
     }
 
