@@ -14,11 +14,11 @@ public class Game extends JFrame{
 	private JButton sbutton;
 	private PlayArea area;
 	private JScrollPane areaS, listS, chatS;
-	private Client client;
+	private final Client client;
 	private ImageIcon ico;
 
-	public Game(Client client){
-		this.client = client;
+	public Game(Client cli){
+		this.client = cli;
 
 		try{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -92,7 +92,6 @@ public class Game extends JFrame{
 			public void actionPerformed(ActionEvent e){
 				String msg = chat.getText();
 				chat.setText("");
-				// conn.sendMessage(msg);
 				client.sendChat(msg);
 				chat.requestFocus();
 			}
@@ -147,7 +146,7 @@ public class Game extends JFrame{
 	public void showAnswers(String[] choices, String question){			// show answers to non-questioner
 		String label = "\"" + question + "\"\n";
 		for(int i=0 ; i<choices.length ; i++){
-			label += "\n" + choices[i];
+			label += "\n- " + choices[i];
 		}
 		JOptionPane.showMessageDialog(this, label, "And the choices are...", JOptionPane.INFORMATION_MESSAGE, ico);
 	}

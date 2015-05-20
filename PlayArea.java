@@ -52,6 +52,12 @@ public class PlayArea extends JPanel{
 		g2d.drawImage(bg_img, 0, 0, this);
 		g2d.drawImage(ac_bck, 309, 122, this);		// answers desk
 		g2d.drawImage(qc_bck, 421, 122, this);		// questions desk
+
+		int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+		// int fontSize = (int)Math.round(11.0 * screenRes / 72.0);
+		Font font = new Font("Arial", Font.BOLD, 12);
+		g2d.setFont(font);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		this.hand = new ACard[10];
 		for(int i=0 ; i<10 ; i++){
@@ -65,34 +71,34 @@ public class PlayArea extends JPanel{
 		String s = "Question:";
 		int stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
 		int start = 375/2 - stringLen/2;
-		g2d.drawString(s, start + 210, 60);
+		g2d.drawString(s, start + 210, 70);
 		s = me.q;
 		stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
 		start = 375/2 - stringLen/2;
-		g2d.drawString(s, start + 210, 80);
+		g2d.drawString(s, start + 210, 90);
 		s = "Player: " + me.name;
 		stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
-		g2d.drawString(s, 750 - stringLen, 125);
+		g2d.drawString(s, 750 - stringLen, 145);
 		s = "Points: " + me.score;
 		stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
-		g2d.drawString(s, 750 - stringLen, 140);
+		g2d.drawString(s, 750 - stringLen, 165);
 		s = "Points to win: " + me.wincon;
 		stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
-		g2d.drawString(s, 750 - stringLen, 155);
+		g2d.drawString(s, 750 - stringLen, 185);
 
 		int x = 50;
 		for(int i=0 ; i<10 ; i++){
 			if(hand[i]!=null){
-				g2d.drawImage(ac_img, x, 336, this);
+				g2d.drawImage(ac_img, x, 325, this);
 				hand[i].setRect(new Rectangle2D.Double(x,336,70,100));
 				if(me.questioner){
 					s = "It's your turn to choose the winning answer!";
 					stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
-					start = 375/2 - stringLen/2;
-					g2d.drawString(s, start + 210, 270);
+					start = 265/2 - stringLen/2;
+					g2d.drawString(s, start + 210, 265);
 					s = "Waiting for the other players to pick an answer...";
 					stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
-					start = 375/2 - stringLen/2;
+					start = 265/2 - stringLen/2;
 					g2d.drawString(s, start + 210, 285);
 					g2d.drawImage(modimg, 421, 122, this);
 				}
@@ -105,16 +111,16 @@ public class PlayArea extends JPanel{
 								g2d.drawImage(selimg, x, 336, this);
 								s = hand[i].getValue();
 								stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
-								start = 375/2 - stringLen/2;
-								g2d.drawString(s, start + 210, 270);
+								start = 265/2 - stringLen/2;
+								g2d.drawString(s, start + 210, 265);
 							}
 						}
 					}
 					else{
 						s = "Waiting for the other players to pick an answer...";
 						stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
-						start = 375/2 - stringLen/2;
-						g2d.drawString(s, start + 210, 270);
+						start = 265/2 - stringLen/2;
+						g2d.drawString(s, start + 210, 265);
 					}
 				}
 			}
