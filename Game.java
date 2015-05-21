@@ -48,14 +48,22 @@ public class Game extends JFrame{
 		chat.setFont(ft);
 		chatS = new JScrollPane(chat);
 		chatS.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		chat.addActionListener( new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String msg = chat.getText();
+				chat.setText("");
+				client.sendChat(msg);
+				chat.requestFocus();
+			}
+		});
+
 		addWindowListener( new WindowAdapter() {
 			public void windowOpened( WindowEvent e ){
 				chat.requestFocus();
 			}
 			public void windowClosing( WindowEvent e){
 				client.close();
-				//.... call some shit
-				// pizza
 			}
 		}); 
 
@@ -135,13 +143,16 @@ public class Game extends JFrame{
 
 	public void chooseAnswer(String[] choices, String question){
 		Object[] answers = (Object[]) choices;
-		String s = (String) JOptionPane.showInputDialog(this, question, "Choose an answer", JOptionPane.QUESTION_MESSAGE, ico, answers, answers[0]);
+		String s = null;
 
-		if ((s != null) && (s.length() > 0)) {
-			System.out.println("You have chosen: " + s);
-			client.choose(s);
+		while((s==null)){
+			s = (String) JOptionPane.showInputDialog(this, question, "Choose an answer", JOptionPane.QUESTION_MESSAGE, ico, answers, answers[0]);
+			if(s==null) continue;
+			if(s.length() <= 0) s = null;
 		}
 
+		System.out.println("You have chosen: " + s);
+		client.choose(s);
 	}
 
 	public void showAnswers(String[] choices, String question){			// show answers to non-questioner

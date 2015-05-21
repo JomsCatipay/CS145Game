@@ -61,11 +61,8 @@ public class PlayArea extends JPanel{
 		
 		this.hand = new ACard[10];
 		for(int i=0 ; i<10 ; i++){
-			// String x = "Card #" + (i+1);
-			// hand[i] = new ACard(x);
 			hand[i] = me.getCard(i);
 		}
-		// this.hand = me.hand
 
 		g2d.setColor(Color.WHITE);
 		String s = "Question:";
@@ -107,7 +104,6 @@ public class PlayArea extends JPanel{
 					if(me.goToSubmit){
 						if(selected != null){
 							if(hand[i].equals(selected)){
-								System.out.println(hand[i].getValue() + " is selected");
 								g2d.drawImage(selimg, x, 325, this);
 								s = hand[i].getValue();
 								stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
@@ -135,18 +131,16 @@ public class PlayArea extends JPanel{
 		if(m == MouseEvent.MOUSE_RELEASED){
 			if(selected != null){
 				if(xco >= 614 && xco <= 714 && yco >= 243 && yco <= 298){
-					me.submit((ACard)selected);
-					System.out.println("Submitted");
+					me.submit((ACard)selected);		// submit selection
 				}
 			}
-			selected = null;
-			System.out.println("Resetted");
+			selected = null;	// reset selection
 			repaint();
 
 			for(int i=0 ; i<10 ; i++){
 				if(hand[i].getRect().contains(xco,yco)){
 					labeltext = hand[i].getValue();
-					if(me.goToSubmit) selected = hand[i];
+					if(me.goToSubmit) selected = hand[i];	// select card
 					repaint();
 				}
 			}
