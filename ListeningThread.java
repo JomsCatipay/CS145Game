@@ -6,6 +6,8 @@ public class ListeningThread extends Thread{
 	MyConnection c;
 	Client parent;
 
+	boolean loopFlag =true;
+
 	public ListeningThread(Socket s, Client main){
 		this.c = new MyConnection(s);	
 		this.parent = main;
@@ -17,10 +19,17 @@ public class ListeningThread extends Thread{
 	}
 
 	public void run(){
-		while(true){
+		while(loopFlag){
 			String lol = c.getMessage().trim();
-			System.out.println(lol);
+			//System.out.println(lol);
 			parent.process(lol);
 		}
+	}
+
+	public void kill(){
+		try{
+			c.close();
+		} catch(IOException e){}
+		loopFlag = false;
 	}
 }

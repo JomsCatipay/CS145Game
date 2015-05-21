@@ -85,6 +85,13 @@ public class Client{
         c.sendMessage("/chat " + s);
     }
 
+    public void close(){
+        c.sendMessage("/kill");
+        lr.kill();
+        screen.setVisible(false);
+        System.exit(0);
+    }
+
     public void process(String s){
         /*
         if(s.startsWith("//")){

@@ -53,6 +53,7 @@ public class Game extends JFrame{
 				chat.requestFocus();
 			}
 			public void windowClosing( WindowEvent e){
+				client.close();
 				//.... call some shit
 				// pizza
 			}

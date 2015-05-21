@@ -104,13 +104,13 @@ public class Server{
 
 				this.wait();
 
-				this.spread("Server message: Everyone has submitted");
+				this.spread("Chat: Server message: Everyone has submitted");
 
 				for(ACard pawn: submitted){
 					if(pawn!=null) this.spread("Ans: " + pawn.getValue());
 				}
 
-				this.spread("Server message: "+ playerNames.get(activePlayers.indexOf(questioner)) + " can now pick an answer");
+				this.spread("Chat: Server message: "+ playerNames.get(activePlayers.indexOf(questioner)) + " can now pick an answer");
 
 				this.wait();
 
@@ -118,10 +118,10 @@ public class Server{
 			}
 
 			//conclude winners
-			System.out.println("Someone won");
+			//System.out.println("Someone won");
 			// actually, questioner won^ on break of loop
 			String w = playerNames.get(activePlayers.indexOf(questioner)) + " won this game!";
-			this.spread("winner " + w);
+			this.spread("Chat: winner " + w);
 			//*/
 		}
 	}
@@ -145,7 +145,7 @@ public class Server{
 	public void waitForUser() throws IOException{
 		MyConnection c = new MyConnection(ssocket.accept());
 		if(lobbyFlag){
-			//System.out.println("S: Connected to "+ c.getSocket().getInetAddress());
+			System.out.println("S: Connected to "+ c.getSocket().getInetAddress());
 			lobby.add(new ServerThread(c, lobby.size(), this));
 			//this.process("state",-1);
 			c.sendMessage("//G");
@@ -212,18 +212,24 @@ public class Server{
 						this.spread("Chosen Answer: " + submitted[i].getValue());
 						questioner = activePlayers.get(i);
 						points[i]++;
-						this.spread(playerNames.get(i) + " got the point");
+						this.spread("Chat: "+ playerNames.get(i) + " got the point");
 						this.notify();
 						break;
 					}
 				}
 			}
+			else if(s.equals("/kill")){
+				for(int i=index+1; i<activePlayers.size(); i++){ activePlayers.get(i).move(i-1); }
+				ServerThread j = activePlayers.remove(index);
+				try{
+					j.kill();
+				}catch (IOException e) {}
+				String lol = playerNames.remove(index);
+				this.spread("Chat: Server Message: " + lol + " has left the game.");
+			}
 			else if(index>=0 && s.startsWith("/chat ")){  // normal chat
 				this.spread("Chat: " + playerNames.get(index) + ": " + s.substring(s.indexOf(" ")+1));
 			}
-
-			//spread here
-			System.out.println(s+" ~~ " + index);
 		}
 	}
 
