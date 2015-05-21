@@ -108,7 +108,7 @@ public class PlayArea extends JPanel{
 						if(selected != null){
 							if(hand[i].equals(selected)){
 								System.out.println(hand[i].getValue() + " is selected");
-								g2d.drawImage(selimg, x, 336, this);
+								g2d.drawImage(selimg, x, 325, this);
 								s = hand[i].getValue();
 								stringLen = (int) g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
 								start = 265/2 - stringLen/2;

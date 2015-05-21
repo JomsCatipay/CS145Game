@@ -119,6 +119,9 @@ public class Server{
 
 			//conclude winners
 			System.out.println("Someone won");
+			// actually, questioner won^ on break of loop
+			String w = playerNames.get(activePlayers.indexOf(questioner)) + " won this game!";
+			this.spread("winner " + w);
 			//*/
 		}
 	}

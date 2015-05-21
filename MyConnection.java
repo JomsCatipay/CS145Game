@@ -53,7 +53,8 @@ public class MyConnection {
 		//*/
 		try{
 			return in.readLine();
-		}catch (IOException e){}	    
+		}catch (IOException e){}
+		return null;
 	}
 
 	public Socket getSocket(){ return s; }

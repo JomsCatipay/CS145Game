@@ -37,6 +37,7 @@ public class Client{
         score = 0;
         try {
             System.out.println("C: Connecting to server...");
+            String ipv;
             String inputValue = JOptionPane.showInputDialog("Connect to IP at:");
             // c = new MyConnection(new Socket("127.0.0.1", 8888));
             c = new MyConnection(new Socket(inputValue, 8888));
@@ -164,6 +165,10 @@ public class Client{
 
             points[ playerNames.indexOf(msg) ]++;
             screen.updateList(playerNames, points);
+        }
+        else if(s.startsWith("winner ")){
+            String msg = s.substring(7);
+            screen.showWin(msg);
         }
     }
 

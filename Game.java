@@ -8,9 +8,8 @@ import java.util.ArrayList;
 public class Game extends JFrame{
 	
 	private JPanel pane;
-	private JTextArea window;
-	private JTextArea list;
-	private JTextArea chat;
+	private JTextArea window, list;
+	private JTextField chat;
 	private JButton sbutton;
 	private PlayArea area;
 	private JScrollPane areaS, listS, chatS;
@@ -45,7 +44,7 @@ public class Game extends JFrame{
 		listS = new JScrollPane(list);
 		listS.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-		chat = new JTextArea(4,10);
+		chat = new JTextField(10);
 		chat.setFont(ft);
 		chatS = new JScrollPane(chat);
 		chatS.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -53,8 +52,9 @@ public class Game extends JFrame{
 			public void windowOpened( WindowEvent e ){
 				chat.requestFocus();
 			}
-			public void windowClosing(WindowEvent e){
-				// conn.sendMessage("/quit");
+			public void windowClosing( WindowEvent e){
+				//.... call some shit
+				// pizza
 			}
 		}); 
 
@@ -101,8 +101,8 @@ public class Game extends JFrame{
 		gb.gridheight = 2;
 		pane.add(sbutton, gb);
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);		// you can't exit this game. muhahahaha
 		setLayout(new BorderLayout());
 
 		area = new PlayArea(client);
@@ -155,6 +155,10 @@ public class Game extends JFrame{
 		String label = winner + " won that round!\nTheir answer was:\n";
 		label += "\"" + ans + "\"";
 		JOptionPane.showMessageDialog(this, label, "And the point goes to...", JOptionPane.INFORMATION_MESSAGE, ico);
+	}
+
+	public void showWin(String winner){
+		JOptionPane.showMessageDialog(this, winner, "The game has ended!", JOptionPane.INFORMATION_MESSAGE, ico);		
 	}
 
 	public void paintpls(){ area.repaint(); }
