@@ -22,16 +22,22 @@ public class MyConnection {
 	}
 
 	public boolean sendMessage(String msg){
+		/*
         String j[] = msg.split("~~");
         for(String i: j){
 	    	out.println(i);
         }
         out.println("~END");
+        //*/
+        //*
+        out.println(msg);
+        //*/
         out.flush();
 		return true;
     }
 
 	public String getMessage(){
+		/*
         String msg = "";
 		try{
             while(!msg.contains("~END")){
@@ -44,6 +50,10 @@ public class MyConnection {
 	    }
 		return msg.substring(0,msg.indexOf("~END"));
 		//return msg;
+		//*/
+		try{
+			return in.readLine();
+		}catch (IOException e){}	    
 	}
 
 	public Socket getSocket(){ return s; }
