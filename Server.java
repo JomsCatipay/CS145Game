@@ -154,6 +154,7 @@ public class Server{
 			lobby.add(new ServerThread(c, lobby.size(), this));
 			//this.process("state",-1);
 			c.sendMessage("//G");
+			this.spread("Chat: Server Message: well... someone has connected");
 		}
 		else{
 			c.sendMessage("S: Server already in play. sorry");
