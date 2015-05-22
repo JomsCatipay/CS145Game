@@ -53,8 +53,6 @@ public class PlayArea extends JPanel{
 		g2d.drawImage(ac_bck, 309, 122, this);		// answers desk
 		g2d.drawImage(qc_bck, 421, 122, this);		// questions desk
 
-		int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-		// int fontSize = (int)Math.round(11.0 * screenRes / 72.0);
 		Font font = new Font("Arial", Font.BOLD, 12);
 		g2d.setFont(font);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

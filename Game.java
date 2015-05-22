@@ -117,7 +117,10 @@ public class Game extends JFrame{
 		area = new PlayArea(client);
 		area.setSize(800, 400);
 		area.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		add(area, BorderLayout.CENTER);
+		pane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		pane.setVisible(true);
+		area.setVisible(false);
+		add(area);
 		add(pane, BorderLayout.PAGE_END);
 
 		setSize(800,700);
@@ -128,7 +131,8 @@ public class Game extends JFrame{
 
 	public void showGame(){
 		area.setVisible(true);
-		pane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		// pane.setSize(800,300);
+		// revalidate();
 	}
 
 	public void showChat(String s){
