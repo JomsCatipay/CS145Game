@@ -2,10 +2,11 @@ import java.net.ServerSocket;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.net.InetAddress;
 
 public class Server{
 	//-- CONSTANTS
-	static int MIN_PLAYERS=1, MAX_PLAYERS=12;
+	static int MIN_PLAYERS=3, MAX_PLAYERS=12;
 	
 	//-- Card Lists
 		//Question Cards
@@ -58,6 +59,8 @@ public class Server{
 		}
 		System.out.println("S: " + queDeck.size() + " Question cards and " + ansDeck.size() + " Answer cards loaded.");
 
+		System.out.println("S: IP is "+ InetAddress.getLocalHost().getHostAddress() );
+
  		System.out.println("S: ... Server is up");
 	}
 
@@ -73,7 +76,7 @@ public class Server{
 			points = new int[activePlayers.size()];
 
 			for(int i=3; i>0; i--){
-				this.spread("Server message: Game Starting in " + i);
+				this.spread("Chat: Server message: Game Starting in " + i);
 				this.shuffleDecks();
 				Thread.sleep(800);
 			}
@@ -85,7 +88,7 @@ public class Server{
 			}
 
 			this.spread("start");
-			this.spread("wincon " + (activePlayers.size() /3 + 2));
+			this.spread("wincon " + ( 8 - (activePlayers.size() /3 + 2) ) ) ;
 			//questioner.send("you question");
 			//*
 			while( points[activePlayers.indexOf(questioner)] < (activePlayers.size() /3 +2) ){
@@ -154,7 +157,6 @@ public class Server{
 		}
 		else{
 			c.sendMessage("S: Server already in play. sorry");
-			c.close();
 		}
 	}
 
@@ -163,13 +165,14 @@ public class Server{
 			if(s.startsWith("ready")){
 				for(String j: playerNames){
 					if(s.substring(s.indexOf(" ")+1).equals(j)){
-						lobby.get(index).send("//G");
+						lobby.get(index).send("Chat: Server Message: name already taken");
 						return;
 					}
 				}
 				//remove ready player from lobby
 				for(int i=index+1; i<lobby.size(); i++){ lobby.get(i).move(i-1); }
 				questioner = lobby.remove(index);
+				//questioner.send("Oks");
 				//add ready player to active
 				questioner.move(activePlayers.size());
 				activePlayers.add(questioner);
@@ -180,7 +183,7 @@ public class Server{
 				//spread word of his name
 				playerNames.add(s.substring(s.indexOf(" ")+1));
 				this.spread("Name: " + playerNames.get(playerNames.size()-1));
-				//this.spread("Chat: Server message: " + playerNames.get(playerNames.size()-1) + " is ready");
+				this.spread("Chat: Server message: " + playerNames.get(playerNames.size()-1) + " is ready");
 				//this.process("state",-1);
 
 				if( activePlayers.size()>=MIN_PLAYERS && activePlayers.size()<=MAX_PLAYERS && lobby.size()==0){
@@ -231,7 +234,8 @@ public class Server{
 				this.spread("Chat: Server Message: " + lol + " has left the game.");
 			}
 			else if(index>=0 && s.startsWith("/chat ")){  // normal chat
-				this.spread("Chat: " + playerNames.get(index) + ": " + s.substring(s.indexOf(" ")+1));
+				if(playerNames.size()<=index) this.spread("Chat: Lobby person " + (index+1) + ": " + s.substring(s.indexOf(" ")+1));
+				else this.spread("Chat: " + playerNames.get(index) + ": " + s.substring(s.indexOf(" ")+1));
 			}
 
 		}
@@ -240,6 +244,9 @@ public class Server{
 	public void spread(String spread){
 		System.out.println(spread);
 		for(ServerThread pawn: activePlayers){
+			pawn.send(spread);
+		}
+		for(ServerThread pawn: lobby){
 			pawn.send(spread);
 		}
 	}

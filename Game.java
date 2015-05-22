@@ -114,18 +114,22 @@ public class Game extends JFrame{
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);		// you can't exit this game. muhahahaha
 		setLayout(new BorderLayout());
 
-		area = new PlayArea(client);
-		area.setSize(800, 400);
-		area.setVisible(true);
-		area.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		pane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		add(area);
 		add(pane, BorderLayout.PAGE_END);
 
 		setSize(800,700);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setTitle("Cards Againt Humanity OnLAN.");
+	}
+
+	public void showGame(){
+		area = new PlayArea(client);
+		area.setSize(800, 400);
+		area.setVisible(true);
+		area.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		add(area, BorderLayout.CENTER);
+		pane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		revalidate();
 	}
 
 	public void showChat(String s){

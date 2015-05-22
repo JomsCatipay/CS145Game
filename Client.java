@@ -49,7 +49,7 @@ public class Client{
 		String s = null;
 		while(s==null){ s = JOptionPane.showInputDialog("Enter Your Name:"); }
 		this.name = s;
-		c.sendMessage("ready " + s);
+		//c.sendMessage("ready " + s);
 	}
 
 	public ACard getCard(int i){
@@ -72,7 +72,14 @@ public class Client{
 	}
 
 	public void sendChat(String s){
-	    c.sendMessage("/chat " + s);
+		if(s.startsWith("/changeName")){
+			this.name = s.substring(s.indexOf(" ")+ 1);
+			screen.showChat("Changed Name to " + this.name);
+		}
+		else if(s.startsWith("/ready")){
+			c.sendMessage("ready " + name);
+		}
+		else c.sendMessage("/chat " + s);
 	}
 	
     public void close(){
@@ -99,7 +106,12 @@ public class Client{
 		    screen.showChat(s.substring(s.indexOf(" ")+1));
 		}
 		else if(s.startsWith("Name: ")){
+			for(String asd: playerNames){
+				if(s.substring(s.indexOf(" ")+1).equals(asd)) return;
+			}
 		    playerNames.add(s.substring(s.indexOf(" ")+1));
+		    points = new int[playerNames.size()];
+		    screen.updateList(playerNames, points);
 		}
 		else if(s.startsWith("Draw: ") && hand.size()<10){
 		    hand.add(new ACard(s.substring(s.indexOf(" ")+1)));
@@ -141,11 +153,8 @@ public class Client{
 		        screen.showAnswers(choices,q);
 		    }
 		}
-		else if(s.contains("start")){
-		    points = new int[playerNames.size()];
-		    screen = new Game(this);
-		    screen.updateList(playerNames, points);
-		    screen.setVisible(true);
+		else if(s.equals("start")){
+			screen.showGame();
 		}
 		else if(s.startsWith("wincon ")){
 		    wincon = s.substring(7);
@@ -153,6 +162,9 @@ public class Client{
 		}
 		else if(s.equals("//G")){
 		    this.readyPrompt();
+		    screen = new Game(this);
+		    screen.setVisible(true);
+		    screen.showChat("Send \"/ready\" whenever");
 		}
 		else if(s.endsWith(" got the point")){
 		    String msg = s.substring(0, s.lastIndexOf(" got the point"));
