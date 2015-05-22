@@ -157,6 +157,7 @@ public class Server{
 		}
 		else{
 			c.sendMessage("S: Server already in play. sorry");
+			c.close();
 		}
 	}
 
@@ -208,6 +209,7 @@ public class Server{
 						break;
 					}
 				}
+				this.spread("Chat: " + playerNames.get(index) + " has submitted their answer");
 				this.drawCard(index);
 				if(flag){ this.notify(); }
 			}
