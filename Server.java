@@ -91,7 +91,7 @@ public class Server{
 			this.spread("wincon " + ( 8 - (activePlayers.size() /3 + 2) ) ) ;
 			//questioner.send("you question");
 			//*
-			while( points[activePlayers.indexOf(questioner)] < (activePlayers.size() /3 +2) ){
+			while( points[activePlayers.indexOf(questioner)] < ( 8 - (activePlayers.size() /3 + 2) ) ){
 				//clear submits
 				submitted = new ACard[activePlayers.size()];
 

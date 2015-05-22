@@ -37,12 +37,14 @@ public class Game extends JFrame{
 
 		areaS = new JScrollPane(window);
 		areaS.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		areaS.setMinimumSize(new Dimension(600,200));
 
 		list = new JTextArea(7, 15);
 		list.setEditable(false);
 		list.setFont(ft);
 		listS = new JScrollPane(list);
 		listS.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		listS.setMinimumSize(new Dimension(200,200));
 
 		chat = new JTextField(10);
 		chat.setFont(ft);
@@ -57,6 +59,7 @@ public class Game extends JFrame{
 				chat.requestFocus();
 			}
 		});
+		listS.setMinimumSize(new Dimension(600,50));
 
 		addWindowListener( new WindowAdapter() {
 			public void windowOpened( WindowEvent e ){
